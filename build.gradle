@@ -1,0 +1,48 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.0'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.mangomelancholy.avro.playground'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	avroTools
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.apache.avro:avro:1.11.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+
+	// Avro Tools for manual compilation
+	avroTools 'org.apache.avro:avro-tools:1.11.0'
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+			srcDir 'src/main/avro'
+		}
+	}
+}
+
+task generateAvro(type: JavaExec) {
+	main = 'org.apache.avro.tool.Main'
+	classpath = configurations.avroTools
+	args = ['compile', 'schema', 'src/main/avro/HelloWorld.avsc', 'src/main/java']
+}
+
+compileJava.dependsOn generateAvro
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

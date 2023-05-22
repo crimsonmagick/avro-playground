@@ -1,0 +1,11 @@
+{
+    "type": "record",
+    "name": "HelloWorld",
+    "namespace": "com.mangomelancholy.avro.playground.webapp.model",
+    "fields": [
+        {
+            "name": "message",
+            "type": "string"
+        }
+    ]
+}
