@@ -36,6 +36,8 @@ sourceSets {
 }
 
 task generateAvro {
+	inputs.dir 'src/main/avro'
+	outputs.dir 'build/generated/java'
 	doLast {
 		def avroFiles = fileTree(dir: 'src/main/avro', include: '**/*.avsc').files.collect { it.path }
 		javaexec {
