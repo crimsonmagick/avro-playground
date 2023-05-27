@@ -35,7 +35,7 @@ sourceSets {
 	}
 }
 
-task generateAvro {
+tasks.register('generateAvro') {
 	inputs.dir 'src/main/avro'
 	outputs.dir 'build/generated/java'
 	doLast {
