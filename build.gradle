@@ -18,27 +18,32 @@ configurations {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.apache.avro:avro:1.11.0'
+	implementation 'org.apache.avro:avro:1.11.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 
 	// Avro Tools for manual compilation
-	avroTools 'org.apache.avro:avro-tools:1.11.0'
+	avroTools 'org.apache.avro:avro-tools:1.11.1'
 }
 
 sourceSets {
 	main {
 		java {
 			srcDir 'src/main/java'
-			srcDir 'src/main/avro'
+			srcDir 'build/generated/java'
 		}
 	}
 }
 
-task generateAvro(type: JavaExec) {
-	main = 'org.apache.avro.tool.Main'
-	classpath = configurations.avroTools
-	args = ['compile', 'schema', 'src/main/avro/HelloWorld.avsc', 'src/main/java']
+task generateAvro {
+	doLast {
+		def avroFiles = fileTree(dir: 'src/main/avro', include: '**/*.avsc').files.collect { it.path }
+		javaexec {
+			main = 'org.apache.avro.tool.Main'
+			classpath = configurations.avroTools
+			args = ['compile', 'schema'] + avroFiles + ['build/generated/java']
+		}
+	}
 }
 
 compileJava.dependsOn generateAvro
