@@ -1,11 +1,12 @@
 @echo off
 
-set JAVA="%JAVA_HOME%\bin\java"
-set SEMVER_SCRIPT="%~dp0semver.ps1"
+setlocal
 
-REM Run the PowerShell script to get the JAR file with the most recent version
-for /f "usebackq delims=" %%F in (`powershell -ExecutionPolicy Bypass -File "%SEMVER_SCRIPT%" "%~dp0.."`) do (
-    set "AVRO_TOOLS_PATH=%~dp0..\%%F"
+set JAVA="%JAVA_HOME%\bin\java"
+
+REM Get the avro-tools JAR file with the most recent version
+for /f "delims=" %%I in ('dir /b /o:-n "%~dp0..\"avro-tools*.jar') do (
+    set "AVRO_TOOLS_PATH=%~dp0..\%%I"
     goto :RunAvroTools
 )
 
@@ -16,3 +17,5 @@ exit /b 1
 :RunAvroTools
 REM Pass all command line arguments to the Avro Tools command
 %JAVA% -jar "%AVRO_TOOLS_PATH%" %*
+
+endlocal
