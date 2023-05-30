@@ -1,0 +1,11 @@
+@namespace("com.example.service")
+protocol ResponseDetailProtocol {
+	record ResponseDetail {
+		/**
+		  * A secondary response code with greater precision.
+		  */
+		int? subCode = 0;
+
+		string? message = "";
+	}
+}

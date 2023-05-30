@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "ResponseDetail",
+  "namespace": "com.example.service",
+  "doc": "Details about the outcome of the request.",
+  "fields": [
+    {
+      "name": "subCode",
+      "type": ["int", "null"],
+      "doc": "A secondary response code with greater precision.",
+      "default": 0
+    },
+    {
+      "name": "message",
+      "type": ["string", "null"],
+      "doc": "A short message describing the response status code (see the strings listing with the response codes).",
+      "default": ""
+    }
+  ]
+}

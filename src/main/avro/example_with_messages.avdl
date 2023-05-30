@@ -1,0 +1,50 @@
+@namespace("com.example.service")
+protocol ExampleProtocol {
+
+	import idl "response_detail.avdl";
+
+	enum DependencyType {
+		REQUIRED, OPTIONAL
+	}
+
+	/**
+	  * Details about status of a dependency.
+	  */
+	record DependencyDetail {
+		union{null, string} name = null;
+		string descendingField = "Default value";
+		string ignoredField;
+		union{null, string} status = null;
+		DependencyType dependencyType;
+		union{null, string} timestamp = null;
+	}
+
+	/**
+	  * A exception that should be for unexpected errors and/or exceptions.
+	  */
+	error CustomException {
+		int errorCode;
+		union{null, string} msg = null;
+		union{null, string} detail = null;
+	}
+
+	/**
+	  * Response from ping request.
+	  */
+	record PingResponse {
+		union{null, string} serviceStatus = null;
+		union{int, null} responseCode = 0;
+		union{null, ResponseDetail} responseDetail = null;
+		union{null, array<DependencyDetail>} dependencies = null;
+	}
+
+	/**
+	  * Indicates whether this service is available to respond to requests.
+	  */
+	PingResponse ping(boolean outputDetail = false) throws CustomException;
+
+	/**
+	  * Inserts a timestamp into the log file indicating that this service is still alive.
+	  */
+	void logTime();
+}
